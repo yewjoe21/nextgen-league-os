@@ -1,34 +1,38 @@
-import { supabase } from "../lib/supabase"
+"use client"
 
-export default async function Home() {
+import { useEffect, useState } from "react"
 
-  const { data: players } = await supabase
-    .from("players")
-    .select("*")
+export default function Home() {
+
+  const pages = [
+    "MATCHES",
+    "RANKING",
+    "PLAYERS",
+    "LIVE TABLES"
+  ]
+
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % pages.length)
+    }, 10000)
+
+    return () => clearInterval(timer)
+  }, [])
 
   return (
     <main style={{
-      background: "#020402",
-      minHeight: "100vh",
-      color: "white",
-      padding: "40px",
-      fontFamily: "Arial"
+      background:"#000",
+      color:"#caff00",
+      height:"100vh",
+      display:"flex",
+      justifyContent:"center",
+      alignItems:"center",
+      fontSize:"60px",
+      fontWeight:"900"
     }}>
-      <h1 style={{
-        color: "#caff00",
-        fontSize: "60px",
-        fontWeight: "900"
-      }}>
-        NEXTGEN LEAGUE OS
-      </h1>
-
-      <h2>Players</h2>
-
-      {players?.map(player => (
-        <div key={player.id}>
-          {player.name} - Rating: {player.rating}
-        </div>
-      ))}
+      {pages[index]}
     </main>
   )
 }
